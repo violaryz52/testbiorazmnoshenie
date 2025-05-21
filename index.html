@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Тест: Размножение и развитие организмов</title>
+    <style>
+        /* Стили из предыдущих тестов */
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        .question { margin: 25px 0; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #f9f9f9; }
+        .answers { margin-left: 20px; }
+        .answer-option { margin: 8px 0; }
+        button { background-color: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        #results { display: none; margin-top: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f5f5f5; }
+        .correct { color: #2e7d32; font-weight: bold; }
+        .incorrect { color: #c62828; font-weight: bold; }
+        .score { font-size: 24px; margin-bottom: 20px; }
+        h1 { color: #2c3e50; text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Тест: Размножение и индивидуальное развитие</h1>
+    <div id="test"></div>
+    <button onclick="checkTest()">Проверить результаты</button>
+    <div id="results"></div>
+
+    <script>
+        const questions = [
+            // Вопрос 35
+            {
+                type: 'single',
+                text: 'Размножение - это процесс:',
+                answers: [
+                    'Увеличения числа клеток',
+                    'Воспроизведение себе подобных',
+                    'Развитие в процессе эволюции',
+                    'Изменение особи от рождения до смерти'
+                ],
+                correct: [1],
+                explanation: 'Размножение - способность организмов воспроизводить себе подобных.'
+            },
+            // Вопрос 36
+            {
+                type: 'multiple',
+                text: 'В каких клетках диплоидный (2n) набор хромосом?',
+                answers: ['Яйцеклетка', 'Сперматозоид', 'Нейрон', 'Зигота'],
+                correct: [2,3],
+                explanation: 'Соматические клетки (нейроны) и зигота имеют диплоидный набор.'
+            },
+            // Вопрос 37
+            {
+                type: 'single',
+                text: 'В результате мейоза количество хромосом:',
+                answers: ['Удваивается', 'Остается прежним', 'Уменьшается вдвое', 'Утраивается'],
+                correct: [2],
+                explanation: 'Мейоз - редукционное деление (из 2n → n).'
+            },
+            // Вопрос 38
+            {
+                type: 'multiple',
+                text: 'В каких клетках человека 23 хромосомы?',
+                answers: [
+                    'Соматические после митоза',
+                    'Оплодотворенная яйцеклетка',
+                    'Сперматозоиды',
+                    'Яйцеклетка'
+                ],
+                correct: [2,3],
+                explanation: 'Гаметы имеют гаплоидный набор (n=23).'
+            },
+            // Вопрос 39
+            {
+                type: 'single',
+                text: 'Митоз - это деление, при котором:',
+                answers: [
+                    'Дочерние клетки идентичны материнской',
+                    'Образуется зигота',
+                    'Образуются половые клетки',
+                    'Из диплоидной получаются гаплоидные'
+                ],
+                correct: [0],
+                explanation: 'Митоз обеспечивает генетическую стабильность клеток.'
+            },
+            // Вопрос 40
+            {
+                type: 'multiple',
+                text: 'Каждый вид характеризуется:',
+                answers: [
+                    'Числом хромосом',
+                    'Формой хромосом',
+                    'Размером хромосом',
+                    'Расположением хромосом'
+                ],
+                correct: [0,1,2,3],
+                explanation: 'Кариотип - видовой признак.'
+            },
+            // Вопрос 41
+            {
+                type: 'single',
+                text: 'Онтогенез - это процесс:',
+                answers: [
+                    'Исторического развития',
+                    'Деления клеток',
+                    'Индивидуального развития',
+                    'Эмбрионального развития'
+                ],
+                correct: [2],
+                explanation: 'Онтогенез - развитие особи от зиготы до смерти.'
+            },
+            // Вопрос 42
+            {
+                type: 'multiple',
+                text: 'Рост организма происходит благодаря:',
+                answers: ['Мейозу', 'Митозу', 'Образованию гамет', 'Увеличению числа клеток'],
+                correct: [1,3],
+                explanation: 'Митоз и гипертрофия клеток.'
+            },
+            // Вопрос 43
+            {
+                type: 'single',
+                text: 'Головной мозг образуется из:',
+                answers: ['Эктодермы', 'Мезодермы', 'Энтодермы', 'Мезоглеи'],
+                correct: [0],
+                explanation: 'Нервная трубка развивается из эктодермы.'
+            },
+            // Вопрос 44
+            {
+                type: 'multiple',
+                text: 'К бесполому размножению относятся:',
+                answers: ['Партеногенез', 'Почкование', 'Спорообразование', 'Вегетативное'],
+                correct: [1,2,3],
+                explanation: 'Бесполое размножение не предполагает гамет.'
+            },
+            // Вопрос 45
+            {
+                type: 'single',
+                text: 'Из оплодотворенной яйцеклетки растений образуется:',
+                answers: ['Семя', 'Плод', 'Зародыш семени', 'Эндосперм'],
+                correct: [2],
+                explanation: 'Зигота → зародыш, эндосперм образуется отдельно.'
+            },
+            // Вопрос 46
+            {
+                type: 'single',
+                text: 'Образование гамет характерно для:',
+                answers: ['Вегетативного', 'Бесполого', 'Полового', 'Клонирования'],
+                correct: [2],
+                explanation: 'Гаметы - половые клетки.'
+            },
+            // Вопрос 47
+            {
+                type: 'single',
+                text: 'Носитель генетической информации в гаметах:',
+                answers: ['Оболочка', 'Цитоплазма', 'Рибосомы', 'Ядро'],
+                correct: [3],
+                explanation: 'Хромосомы с ДНК находятся в ядре.'
+            },
+            // Вопрос 48
+            {
+                type: 'single',
+                text: 'Партеногенез - это развитие из:',
+                answers: ['Зиготы', 'Неоплодотворенной яйцеклетки', 'Споры', 'Фрагмента тела'],
+                correct: [1],
+                explanation: 'Пример: трутни у пчел.'
+            },
+            // Вопрос 49
+            {
+                type: 'single',
+                text: 'Основные закономерности наследственности установил:',
+                answers: ['Иоганнсен', 'Мендель', 'Морган', 'де Фриз'],
+                correct: [1],
+                explanation: 'Г. Мендель - основоположник генетики.'
+            },
+            // Вопрос 50
+            {
+                type: 'single',
+                text: 'Метод Менделя называется:',
+                answers: ['Цитогенетический', 'Генеалогический', 'Статистический', 'Гибридологический'],
+                correct: [3],
+                explanation: 'Анализ скрещиваний разных линий.'
+            },
+            // Вопрос 51
+            {
+                type: 'single',
+                text: 'Гены в гомологичных хромосомах называются:',
+                answers: ['Доминантные', 'Рецессивные', 'Аллельные', 'Неаллельные'],
+                correct: [2],
+                explanation: 'Аллели - альтернативные формы гена.'
+            },
+            // Вопрос 52
+            {
+                type: 'single',
+                text: 'Совокупность наследственных задатков:',
+                answers: ['Геном', 'Генотип', 'Генофонд', 'Гены'],
+                correct: [1],
+                explanation: 'Генотип - вся генетическая информация организма.'
+            },
+            // Вопрос 53
+            {
+                type: 'single',
+                text: 'Моногибридное скрещивание изучает:',
+                answers: ['1 признак', '2 признака', '3 признака', '4 признака'],
+                correct: [0],
+                explanation: 'Моногибридное - одна пара альтернативных признаков.'
+            },
+            // Вопрос 54
+            {
+                type: 'single',
+                text: 'Расщепление признака наблюдается у:',
+                answers: ['Гибридов', 'Гомозигот', 'Гетерозигот', 'Гемизигот'],
+                correct: [2],
+                explanation: 'Гетерозиготы (Aa) дают расщепление 3:1.'
+            }
+        ];
+
+        // Генерация теста
+        let testHTML = '';
+        questions.forEach((q, index) => {
+            testHTML += `<div class="question" id="q${index}">
+                <h3>${index+1}. ${q.text}</h3>
+                <div class="answers">`;
+            
+            q.answers.forEach((a, i) => {
+                testHTML += `<div class="answer-option">
+                    <input type="${q.type === 'single' ? 'radio' : 'checkbox'}" 
+                           name="q${index}" 
+                           value="${i}"
+                           id="q${index}a${i}">
+                    <label for="q${index}a${i}">${a}</label>
+                </div>`;
+            });
+            
+            testHTML += '</div></div>';
+        });
+
+        document.getElementById('test').innerHTML = testHTML;
+
+        // Функции проверки
+        function checkTest() {
+            let correctCount = 0;
+            const results = [];
+
+            questions.forEach((q, index) => {
+                const selected = [];
+                const inputs = document.querySelectorAll(`input[name="q${index}"]:checked`);
+                inputs.forEach(input => selected.push(parseInt(input.value)));
+                
+                const isCorrect = arraysEqual(selected.sort(), q.correct.sort());
+                if(isCorrect) correctCount++;
+                
+                results.push({
+                    question: q.text,
+                    correct: isCorrect,
+                    correctAnswers: q.correct,
+                    selected: selected,
+                    explanation: q.explanation
+                });
+            });
+
+            const percent = (correctCount / questions.length * 100).toFixed(1);
+            let grade = '';
+            if(percent >= 91) grade = '5 (Отлично)';
+            else if(percent >= 70) grade = '4 (Хорошо)';
+            else if(percent >= 50) grade = '3 (Удовлетворительно)';
+            else grade = '2 (Неудовлетворительно)';
+
+            let resultsHTML = `
+                <div class="score">Ваш результат: ${percent}% (${grade})</div>
+                <h3>Подробные результаты:</h3>
+            `;
+            
+            results.forEach((r, i) => {
+                const correctAnswerText = r.correctAnswers.map(ca => questions[i].answers[ca]).join(', ');
+                const selectedAnswerText = r.selected.length > 0 
+                    ? r.selected.map(s => questions[i].answers[s]).join(', ')
+                    : 'Нет ответа';
+                
+                resultsHTML += `
+                <div class="${r.correct ? 'correct' : 'incorrect'}">
+                    <h4>${i+1}. ${r.question}</h4>
+                    <p><strong>Ваш ответ:</strong> ${selectedAnswerText}</p>
+                    <p><strong>Правильный ответ:</strong> ${correctAnswerText}</p>
+                    <p><em>${r.explanation}</em></p>
+                </div>`;
+            });
+
+            document.getElementById('results').innerHTML = resultsHTML;
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function arraysEqual(a, b) {
+            return JSON.stringify(a) === JSON.stringify(b);
+        }
+    </script>
+</body>
+</html>
